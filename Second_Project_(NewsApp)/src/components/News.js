@@ -2,20 +2,62 @@ import React, { Component } from 'react'
 import NewsItem from './NewsItem'
 
 export default class News extends Component {
+
+    constructor(){
+        super();
+        this.state = {
+            articles : [],
+            loading : false,
+            page : 1        
+        }
+    }
+
+    async componentDidMount(){
+        let url = "https://newsapi.org/v2/top-headlines?country=in&apiKey=77a5590306d3471ba0d5bd7fd0ade0a3&pageSize=20";
+        let data = await fetch(url);
+        let parsedData = await data.json();
+        console.log(parsedData);
+        this.setState({articles: parsedData.articles, totalResults: parsedData.totalResults});
+    }
+
+    handlePrevClick= async()=>{
+        let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=77a5590306d3471ba0d5bd7fd0ade0a3&page=${this.state.page-1}&pageSize=20`;
+        let data = await fetch(url);
+        let parsedData = await data.json();
+        this.setState({articles: parsedData.articles});
+        this.setState({
+            page: this.state.page - 1
+        })
+    }
+    handleNextClick = async()=>{
+        if(this.state.page + 1 > Math.ceil(this.state.totalResults/20)){
+
+        }else{
+            let url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=77a5590306d3471ba0d5bd7fd0ade0a3&page=${this.state.page+1}&pageSize=20`;
+            let data = await fetch(url);
+            let parsedData = await data.json();
+            this.setState({articles: parsedData.articles});
+            this.setState({
+                page: this.state.page + 1
+            })
+        }
+    }
+    
+
     render() {
         return (
             <div className='container my-3'>
                 <h1 className='text-center'>News App - Top Headlines</h1>
                 <div className="row d-flex justify-content-center">
-                    <div className="col-md-3 mx-3 my-2">
-                        <NewsItem title="My title" desc="Okk"/>
-                    </div>
-                    <div className="col-md-3 mx-3 my-2">
-                        <NewsItem title="My title" desc="Okk"/>
-                    </div>
-                    <div className="col-md-3 mx-3 my-2">
-                        <NewsItem title="My title" desc="Okk"/>
-                    </div>
+                    {this.state.articles.map((element)=>{
+                        return <div className="col-md-4 my-2" key={element.url}>
+                            <NewsItem newsUrl={element.url} title={element.title} desc={element.description} imageURL={element.urlToImage}/>
+                        </div>
+                    })}
+                </div>
+                <div className="container d-flex justify-content-between">
+                    <button disabled={this.state.page<=1} type='button' className='btn btn-primary' onClick={this.handlePrevClick}>&larr; Previous</button>
+                    <button type='button' className='btn btn-primary' onClick={this.handleNextClick}>Next &rarr;</button>
                 </div>
             </div>
         )
