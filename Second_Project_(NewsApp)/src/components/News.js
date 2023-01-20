@@ -26,10 +26,11 @@ export default class News extends Component {
     }
 
     async componentDidMount(){
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=77a5590306d3471ba0d5bd7fd0ade0a3&pageSize=${this.props.pageSize}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=9dd1eefbba3b43e79d25129cdcccde60&pageSize=${this.props.pageSize}`;
         this.setState({loading:true})
         let data = await fetch(url);
         let parsedData = await data.json(); 
+        console.log(parsedData);
         this.setState({
             articles: parsedData.articles, 
             totalResults: parsedData.totalResults,
@@ -38,7 +39,7 @@ export default class News extends Component {
     }
 
     handlePrevClick= async()=>{
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=77a5590306d3471ba0d5bd7fd0ade0a3&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=9dd1eefbba3b43e79d25129cdcccde60&page=${this.state.page-1}&pageSize=${this.props.pageSize}`;
         this.setState({loading: true});
         let data = await fetch(url);
         let parsedData = await data.json();
@@ -49,7 +50,7 @@ export default class News extends Component {
         });
     }
     handleNextClick = async()=>{
-        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=77a5590306d3471ba0d5bd7fd0ade0a3&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
+        let url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apikey=9dd1eefbba3b43e79d25129cdcccde60&page=${this.state.page+1}&pageSize=${this.props.pageSize}`;
         this.setState({loading: true});
         let data = await fetch(url);
         let parsedData = await data.json();
@@ -68,12 +69,13 @@ export default class News extends Component {
                 <div className="row d-flex justify-content-center">
                     {!this.state.loading && this.state.articles.map((element)=>{
                         return <div className="col-md-4 my-2" key={element.url}>
-                            <NewsItem newsUrl={element.url} title={element.title} desc={element.description} imageURL={element.urlToImage}/>
+                            <NewsItem newsUrl={element.url} title={element.title} desc={element.description} imageURL={element.urlToImage} author={element.author} date={element.publishedAt} source={element.source.name} categories={this.props.categories} />
                         </div>
                     })}
                 </div>
                 <div className="container d-flex justify-content-between">
                     <button disabled={this.state.page<=1} type='button' className='btn btn-primary' onClick={this.handlePrevClick}>&larr; Previous</button>
+
                     <button disabled={this.state.page+1 > Math.ceil(this.state.totalResults/this.props.pageSize)} type='button' className='btn btn-primary' onClick={this.handleNextClick}>Next &rarr;</button>
                 </div>
             </div>
