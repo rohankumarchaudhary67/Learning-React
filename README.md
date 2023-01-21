@@ -13,8 +13,8 @@ Once you're ready, you can start by installing the necessary tools for this proj
 **There are 3 Projects :**
 
 1. TextUtils - "It helps to learn function based react component and all the basics of react.js"
-2. News APP - "It helps to learn the class based react component and how to fetch API and how to push and pull request to use API"
-3. ToDoList - "It helps to learn how to create own API and all other things which is required to create react applications."
+2. News APP - "It helps to learn the class based react component and how to fetch API and how to push and pull request to use API."
+3. ToDoList - "It helps to learn how to create own API and all other things which is required to create react applications. It also tell them how to gives the features of login and sign up in react application."
 
 
 
