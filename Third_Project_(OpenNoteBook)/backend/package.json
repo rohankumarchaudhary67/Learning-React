@@ -1,0 +1,15 @@
+{
+  "name": "open-note-book-backened",
+  "version": "1.0.0",
+  "description": "Open Note Book (Open NB) is book to take notes",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.8.4"
+  }
+}
