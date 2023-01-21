@@ -5,7 +5,7 @@ export default class loading extends Component {
     render() {
         return (
             <div>
-                <img src={loader} alt="" />
+                <img className='my-3' src={loader} alt="" />
             </div>
         )
     }

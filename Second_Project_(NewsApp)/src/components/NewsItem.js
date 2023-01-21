@@ -6,7 +6,7 @@ export default class NewsItem extends Component {
         return (
             <div>
                 <div className="card">
-                <span class={`position-absolute top-0 start-100 translate-middle badge rounded-pill bg-${categories}`}>
+                <span className={`position-absolute top-0 start-100 translate-middle badge rounded-pill bg-${categories}`}>
                     {source}
                 </span>
                     <img src={!imageURL?"https://akm-img-a-in.tosshub.com/indiatoday/images/story/202301/phone_0-sixteen_nine.jpg?VersionId=sJ7UYNgtRqQCqZbW.tA0vYqhjFXWTLiy":imageURL} alt="..." style={{height: 200, width:"100%"}}/>
