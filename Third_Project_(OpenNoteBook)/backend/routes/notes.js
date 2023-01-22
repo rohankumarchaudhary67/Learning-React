@@ -27,7 +27,7 @@ const router = express.Router();
 
 // ##################################### ROUTE 1 ########################################
 
-// Fetch all the notes of user : GET "/api/auth/fetchallnotes" :  login required
+// Fetch all the notes of user : GET "/api/notes/fetchallnotes" :  login required
 router.get('/fetchallnotes', fetchuser, async(req, res) => {
 
     try {
@@ -51,7 +51,7 @@ router.get('/fetchallnotes', fetchuser, async(req, res) => {
 
 // ##################################### ROUTE 2 ########################################
 
-// Add the notes of user : POST "/api/auth/addnote" :  login required
+// Add the notes of user : POST "/api/notes/addnote" :  login required
 router.post('/addnote', fetchuser, [
 
     // Here we use validation
@@ -97,7 +97,58 @@ router.post('/addnote', fetchuser, [
 
 
 
+// ##################################### ROUTE 3 ########################################
 
+// Update the existing notes of user : PUT "/api/notes/updatenote" :  login required
+router.put('/updatenote/:id', fetchuser, async(req, res)=>{
+
+    try {
+
+        // extract the data from body
+        const {title, description, tag} = req.body;
+
+        // Create a new note object
+        const newNote = {};
+        // If these data is inserted by the user then add in newNote if not then not insert in newNote
+        if(title){
+            newNote.title = title
+        }
+        if(description){
+            newNote.description = description
+        }
+        if(tag){
+            newNote.tag = tag
+        }
+
+
+        // Check that note is exists or not
+        let note = await Notes.findById(req.params.id);
+
+        // If note is not exists
+        if(!note){
+            return res.status(404).send("Not found");
+        }
+
+        // If note exists then note is own by right user
+        if(note.user.toString() !== req.user.id){
+            return res.status(401).send("Not Allowed");
+        }
+
+        // After all the check of notes and user then update
+        note = await Notes.findByIdAndUpdate(req.params.id, {$set: newNote}, {new:true});
+
+
+        // Response of the route
+        res.json(note);
+        
+        
+    } catch(error){
+        // If any error occured this message is shown
+        console.log(error.message);
+        res.status(500).json({error:"Internal Server Error"});
+    }
+
+})
 
 
 
