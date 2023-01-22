@@ -49,6 +49,14 @@ router.get('/fetchallnotes', fetchuser, async(req, res) => {
 
 
 
+
+
+
+
+
+
+
+
 // ##################################### ROUTE 2 ########################################
 
 // Add the notes of user : POST "/api/notes/addnote" :  login required
@@ -97,9 +105,15 @@ router.post('/addnote', fetchuser, [
 
 
 
+
+
+
+
+
+
 // ##################################### ROUTE 3 ########################################
 
-// Update the existing notes of user : PUT "/api/notes/updatenote" :  login required
+// Update the existing notes of user : PUT "/api/notes/updatenote/:id" :  login required
 router.put('/updatenote/:id', fetchuser, async(req, res)=>{
 
     try {
@@ -140,6 +154,53 @@ router.put('/updatenote/:id', fetchuser, async(req, res)=>{
 
         // Response of the route
         res.json(note);
+        
+        
+    } catch(error){
+        // If any error occured this message is shown
+        console.log(error.message);
+        res.status(500).json({error:"Internal Server Error"});
+    }
+
+})
+
+
+
+
+
+
+
+
+
+
+// ##################################### ROUTE 4 ########################################
+
+// Delete the existing notes of user : DELETE "/api/notes/deletenote/:id" :  login required
+router.delete('/deletenote/:id', fetchuser, async(req, res)=>{
+
+    try {
+
+        // Check that note is exists or not
+        let note = await Notes.findById(req.params.id);
+
+        // If note is not exists
+        if(!note){
+            return res.status(404).send("Not found");
+        }
+
+        // If note exists then note is own by right user
+        if(note.user.toString() !== req.user.id){
+            return res.status(401).send("Not Allowed");
+        }
+
+        //If it pass the all checks then delete it
+        note = await Notes.findByIdAndDelete(req.params.id);
+
+        // Response of the route
+        res.json({
+            "Success":"Deleted",
+            note: note
+        });
         
         
     } catch(error){
