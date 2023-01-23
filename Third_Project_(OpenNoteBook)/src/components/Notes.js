@@ -14,7 +14,7 @@ const Notes = () => {
     const context = useContext(noteContext);
 
     // destructuring of the context components
-    const { note, setNote } = context;
+    const { note, addNote } = context;
 
     return (
         <>
