@@ -26,7 +26,7 @@ const Notes = () => {
                 {/* fetch all the notes and map here  */}
                 {
                     note.map((note) => {
-                        return <NoteItem note={note} />;
+                        return <NoteItem key={note._id} note={note} />;
                     })
                 }
 
