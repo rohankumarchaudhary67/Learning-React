@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-// import react component from react
-import React from 'react'
+// import notes from notes componenet
+import Notes from "./Notes"
 
 // Main function of home component
 const home = () => {
@@ -29,9 +29,9 @@ const home = () => {
                     <button type="submit" className="btn btn-primary">Submit</button>
                 </form>
 
-                <h1 className='text-left my-3'>Your Notes : </h1>
-
             </div>
+
+            <Notes />
 
         </div>
     )
