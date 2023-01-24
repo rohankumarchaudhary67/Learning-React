@@ -56,11 +56,13 @@ router.post('/createuser', [
 
     // Check whether the user is already exists
     try{
+        let success = true;
         // It can find that user is alreay exists or not
         let user = await User.findOne({email: req.body.email});
         if(user){
+            success = false;
             // if user found then send this
-            return res.status(400).json({email:"This email aready exists"})
+            return res.status(400).json({success, email:"This email aready exists"})
         }
         // Create a salt to add extra security for password
         const salt = await bcrypt.genSalt(10);
@@ -84,7 +86,7 @@ router.post('/createuser', [
         //2. create token
         const auth_Token = jwt.sign(payLoad, JWT_Secret);
         //3. Send the token
-        res.json({auth_Token});
+        res.json({success, auth_Token});
 
     }catch(error){
         // If any error occured this message is shown
@@ -106,7 +108,7 @@ router.post('/login', [
     // check email with .isEmail()
     body('email', "Enter the valid email (with @)").isEmail(),
     // password must be at least 5 chars long
-    body('password', "Password cannot be black").exists()
+    body('password', "Password cannot be blank").exists(),
 
 ], async(req, res)=>{
 
@@ -115,23 +117,27 @@ router.post('/login', [
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-
     // Take the email and password from body
     const {email, password} = req.body;
 
+
     try{
+        
+        let success = true;
 
         // Find the email is exists or not
         let user = await User.findOne({email});
         if(!user){
-            return res.status(400).json({error:"Please try with correct credentials"});
+            success = false;
+            return res.status(400).json({success, error:"Please try with correct credentials"});
         }
 
         // Compare password here
         const comparePassword = await bcrypt.compare(password, user.password);
         // If password does not match with user
         if(!comparePassword){
-            return res.status(400).json({error:"Please try with correct credentials"});
+            success = false;
+            return res.status(400).json({success, error:"Please try with correct credentials"});
         }
 
         // If password match with the user - 
@@ -139,13 +145,13 @@ router.post('/login', [
         //1. send the data
         const payLoad = {
             user:{
-                id:user.id
+                id:user._id
             }
         }
         //2. create token
         const auth_Token = jwt.sign(payLoad, JWT_Secret);
         //3. Send the token
-        res.json({auth_Token});
+        res.json({success, auth_Token});
 
 
     }catch(error){

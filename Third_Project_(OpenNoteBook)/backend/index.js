@@ -6,6 +6,9 @@ const connectToMongo = require('./db');
 // import or require the express
 const express = require('express');
 
+// import cors for hit api from browser
+var cors = require('cors');
+
 // Call the function to connect with database
 connectToMongo();
 
@@ -16,6 +19,8 @@ const port = 5000;
 
 // It is a middle ware to the express js
 app.use(express.json());
+
+app.use(cors());
 
 // Available roots
 app.use('/api/auth', require('./routes/auth'));

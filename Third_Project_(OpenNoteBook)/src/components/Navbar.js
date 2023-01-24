@@ -2,9 +2,16 @@ import React, { useEffect } from 'react'
 
 
 // import react router component from react-router-dom
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 
 const Navbar = () => {
+
+    let navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+    }
 
     let location = useLocation();
 
@@ -29,10 +36,10 @@ const Navbar = () => {
                         <Link className={`nav-link ${location.pathname==='/about'?"active":""}`} to="/about">About</Link>
                     </li>
                     </ul>
-                    <form className="form-inline my-2 my-lg-0">
-                    <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search"/>
-                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form>
+                    {!localStorage.getItem('token') ? <form className="form-inline my-2 my-lg-0">
+                    <Link className="btn btn-primary mx-1 my-2 py-1 my-sm-0" to="/login" type="submit">Login</Link>
+                    <Link className="btn btn-primary mx-1 my-2 py-1 my-sm-0" to="/signup" type="submit">SignUp</Link>
+                    </form>:<button className='btn btn-primary' onClick={handleLogout}>Logout</button>}
                 </div>
             </nav>
         </div>
